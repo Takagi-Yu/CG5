@@ -169,6 +169,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 
 
+
 	while (true) {
 		if (KamataEngine::Update()) {
 			break;
