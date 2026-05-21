@@ -8,6 +8,7 @@ using namespace KamataEngine;
 
 void VertexBuffer::Create(const UINT size, const UINT stride) { 
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
+	HRESULT hr;
 
 	D3D12_HEAP_PROPERTIES uploadProperties{};
 	uploadProperties.Type = D3D12_HEAP_TYPE_UPLOAD; // CPUから書き込むヒープ
@@ -25,7 +26,7 @@ void VertexBuffer::Create(const UINT size, const UINT stride) {
 
 	// 実際に頂点リソースを生成する
 	ID3D12Resource* vertexResource = nullptr;
-	HRESULT hr =
+	hr =
 	    dxCommon->GetDevice()->CreateCommittedResource(&uploadProperties, D3D12_HEAP_FLAG_NONE, &vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vertexResource));
 	assert(SUCCEEDED(hr));
 
