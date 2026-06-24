@@ -51,9 +51,10 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	// 頂点データの準備
 	VertexData vertices[] = {
-	    {0.0f,  0.5f,  0.0f, 1.0f},
-	    {0.5f,  -0.5f, 0.0f, 1.0f},
+	    {-0.5f, 0.5f,  0.0f, 1.0f},
+	    {0.5f,  0.5f,  0.0f, 1.0f},
 	    {-0.5f, -0.5f, 0.0f, 1.0f},
+	    {0.5f,  -0.5f, 0.0f, 1.0f},
 	};
 
 	
@@ -68,7 +69,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		pGpuVertices[i] = vertices[i];
 	}
 
-	uint16_t indices[] = {0, 1, 2};
+	uint16_t indices[] = {0, 1, 2, 2, 1, 3};
 
 	// IndexBuffer(IndexResource,IndexResourceView)の生成
 	IndexBuffer ib;
@@ -85,9 +86,10 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	// 頂点リソースにデータを書き込む
 	Vector4* vertexData = nullptr;
 	vb.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
-	vertexData[0] = {-0.5f, -0.5f, 0.0f, 1.0f};
-	vertexData[1] = {0.0f, 0.5f, 0.0f, 1.0f};
-	vertexData[2] = {0.5f, -0.5f, 0.0f, 1.0f};
+	vertexData[0] = {-0.5f, 0.5f, 0.0f, 1.0f};
+	vertexData[1] = {0.5f, 0.5f, 0.0f, 1.0f};
+	vertexData[2] = {-0.5f, -0.5f, 0.0f, 1.0f};
+	vertexData[3] = {0.5f, -0.5f, 0.0f, 1.0f};
 	// 頂点リソースのマップを解除する
 	//vb.Get()->Unmap(0, nullptr);
 
