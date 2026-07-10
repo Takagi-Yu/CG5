@@ -4,6 +4,7 @@
 #include "PipelineState.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "WorldTransformEx.h"
 #include <Windows.h>
 #include <cassert>
 
@@ -169,6 +170,19 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	device->CreateShaderResourceView(renderTextureResource, &srvDesc, srvHandleCPU);
 
+	// 被写体の準備
+	Model* model = Model::CreateFromOBJ("terrain");
+
+	WorldTransformEx worldTransform;
+	worldTransform.Initialize();
+	worldTransform.scale_ = Vector3(1.0f, 1.0f, 1.0f);
+
+	// カメラの準備
+	Camera camera;
+	camera.Initialize();
+	camera.translation_ = Vector3(0.0f, 1.0f, 0.0f);
+
+
 
 
 
@@ -179,6 +193,13 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		if (KamataEngine::Update()) {
 			break;
 		}
+
+		// world変換行列の定数バッファへの転送
+		worldTransform.rotation_.y += 0.005f;
+		worldTransform.UpdateMatrix();
+
+		// cameraの更新と定数バッファへの転送
+		camera.UpdateMatrix();
 
 		
 
@@ -241,12 +262,16 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		commandList->DrawIndexedInstanced(_countof(indices), 1, 0, 0, 0);
 
 
+		Model::PreDraw();
 
+		model->Draw(worldTransform, camera);
 
-
+		Model::PostDraw();
 
 		dxCommon->PostDraw();
 	}
+
+	delete model;
 
 
 	renderTextureResource->Release();
